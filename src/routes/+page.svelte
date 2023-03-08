@@ -1,4 +1,4 @@
-<main class="index">
+<div class="index">
   <h1>DogQuiry</h1>
   <!-- svelte-ignore a11y-missing-attribute -->
   <img
@@ -14,13 +14,15 @@
     voluptatibus. Dignissimos animi explicabo culpa, eligendi illo recusandae
     alias.
   </p>
-</main>
+</div>
 
 <style>
   .index {
     display: block;
     margin: 20px auto;
     text-align: center;
+    height: 100%;
+    overflow-y: none;
   }
   h1 {
     font-size: 70px;
@@ -54,8 +56,8 @@
   }
   input:focus {
     outline: none;
-    box-shadow: 0px 4px 4px rgba(34, 130, 255, 0.25);
-    border: 1px solid rgba(34, 130, 255, 0.25);
+    box-shadow: 0px 4px 4px rgba(255, 34, 34, 0.25);
+    border: 1px solid rgba(255, 34, 34, 0.25);
   }
   input::target-text {
     margin-left: 10px;
@@ -75,6 +77,7 @@
   }
   button:hover{
     box-shadow: 0px 4px 4px rgba(231, 80, 80, 0.25);
+    cursor: pointer;
   }
   button:focus{
     box-shadow: 0px 4px 4px rgba(231, 80, 80, 0.5);

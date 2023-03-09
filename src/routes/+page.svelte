@@ -56,7 +56,7 @@
   }
   input:focus {
     outline: none;
-    box-shadow: 0px 4px 4px rgba(255, 34, 34, 0.25);
+    box-shadow: 0px 4px 4px rgba(255, 34, 34, 0.5);
     border: 1px solid rgba(255, 34, 34, 0.25);
   }
   input::target-text {

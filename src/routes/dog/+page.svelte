@@ -1,16 +1,29 @@
 <script>
+  import dog from "../../lib/dog.js";
+  import { goto } from "$app/navigation";
   import Header from "$lib/Header.svelte";
   import Review from "./Review.svelte";
   import MetricGrid from "./MetricGrid.svelte";
+
+  let dog_val = "";
+  let new_dog_val = "";
+
+  dog.subscribe((value) => {
+    dog_val = value;
+  });
+
+  console.log(dog_val);
 </script>
 
 <main>
   <Header />
   <div class="dog-showcase">
-    <MetricGrid />
+    <div class="metric-grid-container">
+      <MetricGrid />
+    </div>
     <div class="left-section">
-      <h1>German Shepherd</h1>
-      <button>Review This Breed</button>
+      <h1>{dog_val}</h1>
+      <button on:click={() => goto("/review")}>Review This Breed</button>
     </div>
   </div>
   <Review />
@@ -24,12 +37,14 @@
   .dog-showcase {
     height: 225px;
     border-bottom: 4px solid rgba(83, 80, 80, 0.2);
-    padding-right: 200px;
-    padding-left: 200px;
+    padding-right: 5%;
+    padding-left: 5%;
     padding-top: 10px;
     overflow-y: hidden;
-    background-image: url("https://www.freewebheaders.com/wp-content/gallery/dogs/german-shepherd-dog-and-puppy-website-header.jpg");
     object-fit: contain;
+  }
+  .metric-grid-container {
+    margin-right: 10%;
   }
   .left-section {
     display: flex;
@@ -53,11 +68,11 @@
     font-size: 20px;
     font-weight: bold;
   }
-  button:hover{
+  button:hover {
     box-shadow: 0px 4px 4px rgba(231, 80, 80, 0.25);
     cursor: pointer;
   }
-  button:focus{
+  button:focus {
     box-shadow: 0px 4px 4px rgba(231, 80, 80, 0.5);
     outline: none;
   }

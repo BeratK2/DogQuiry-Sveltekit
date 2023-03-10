@@ -1,39 +1,40 @@
 <script>
   import Header from "$lib/Header.svelte";
+  import { goto } from "$app/navigation";
 </script>
 
 <main>
   <Header />
   <section>
-    <h2>Rate this dog's OBEDIENCE from 1-10</h2>
+    <h2>Rate this breed's OBEDIENCE from 1-10</h2>
     <input type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this dog's HEALTH from 1-10</h2>
+    <h2>Rate this breed's HEALTH from 1-10</h2>
     <input type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this dog's COMPASSION from 1-10</h2>
+    <h2>Rate this breed's COMPASSION from 1-10</h2>
     <input type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this dog's SIZE from 1-10</h2>
+    <h2>Rate this breed's SIZE from 1-10</h2>
     <input type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this dog's CLEANLINESS from 1-10</h2>
+    <h2>Rate this breed's CLEANLINESS from 1-10</h2>
     <input type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this dog's OBEDIENCE from 1-10</h2>
+    <h2>Rate this breed's OBEDIENCE from 1-10</h2>
     <input type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this dog's OBEDIENCE from 1-10</h2>
+    <h2>Share your experience owning this breed</h2>
     <textarea name="" id="" cols="30" rows="10" />
   </section>
   <section>
-    <button>Submit Review</button>
+    <button on:click={() => goto("/dog")}>Submit Review</button>
   </section>
 </main>
 
@@ -71,7 +72,7 @@
     box-shadow: 0px 4px 4px rgba(255, 34, 34, 0.5);
     border: 1px solid rgba(255, 34, 34, 0.25);
   }
-  button{
+  button {
     width: 225px;
     height: 60px;
     background: #e66464;
@@ -82,5 +83,13 @@
     font-size: 20px;
     font-weight: bold;
     margin-top: 25px;
+  }
+  button:hover {
+    box-shadow: 0px 4px 4px rgba(231, 80, 80, 0.25);
+    cursor: pointer;
+  }
+  button:focus {
+    box-shadow: 0px 4px 4px rgba(231, 80, 80, 0.5);
+    outline: none;
   }
 </style>

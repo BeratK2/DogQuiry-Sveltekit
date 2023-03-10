@@ -1,12 +1,33 @@
+<script>
+  import dog from "../lib/dog";
+  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
+
+  let dog_val = "";
+  let new_dog_val = "";
+  let saveDog = false;
+
+  dog.subscribe((value) => {
+    dog_val = value;
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(dog);
+    dog.set(new_dog_val);
+    goto("/dog");
+  };
+</script>
+
 <div class="index">
-  <h1>DogQuiry</h1>
+  <h1>{dog_val}</h1>
   <!-- svelte-ignore a11y-missing-attribute -->
   <img
     src="https://www.alltech.com/sites/default/files/2021-08/Pet%20Mobile%20Header_0.png"
   />
   <div class="form-container">
-    <input placeholder="Search for a dog breed" />
-    <button>Search This Breed</button>
+    <input bind:value={new_dog_val} placeholder="Search for a dog breed" />
+    <button on:click={(e) => handleSubmit(e)}>Search This Breed</button>
   </div>
   <p>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta quasi quo
@@ -75,15 +96,15 @@
     font-size: 30px;
     font-weight: bold;
   }
-  button:hover{
+  button:hover {
     box-shadow: 0px 4px 4px rgba(231, 80, 80, 0.25);
     cursor: pointer;
   }
-  button:focus{
+  button:focus {
     box-shadow: 0px 4px 4px rgba(231, 80, 80, 0.5);
     outline: none;
   }
-  p{
+  p {
     margin-top: 50px;
   }
 </style>

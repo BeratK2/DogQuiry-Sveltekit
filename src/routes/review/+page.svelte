@@ -26,7 +26,7 @@
     <input type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this breed's OBEDIENCE from 1-10</h2>
+    <h2>Rate how ENERGETIC this breed is from 1-10</h2>
     <input type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>

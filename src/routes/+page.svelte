@@ -1,26 +1,41 @@
 <script>
   import dog from "../lib/dog";
   import { goto } from "$app/navigation";
+  import supabase from "../lib/db/db.js"
   import { onMount } from "svelte";
 
   let dog_val = "";
   let new_dog_val = "";
-  let saveDog = false;
+
+  let breeds = [];
 
   dog.subscribe((value) => {
     dog_val = value;
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  console.log(breeds);
+
+  const handleSubmit = () => {
     console.log(dog);
     dog.set(new_dog_val);
     goto("/dog");
   };
+
+  const getAllDogs = async () => {
+    try{
+      let { data, error } = await supabase.from("dogs").select("Breed");
+      console.log(data)
+    }
+    catch(e){
+      console.error(e)
+    }
+  };
+
+  getAllDogs();
 </script>
 
 <div class="index">
-  <h1>{dog_val}</h1>
+  <h1>DogQuiry</h1>
   <!-- svelte-ignore a11y-missing-attribute -->
   <img
     src="https://www.alltech.com/sites/default/files/2021-08/Pet%20Mobile%20Header_0.png"

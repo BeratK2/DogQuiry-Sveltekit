@@ -1,9 +1,26 @@
 <script>
+    import dog from "../lib/dog";
+    import { goto } from "$app/navigation";
+
+    let dog_val = "";
+    let new_dog_val = "";
+
+    dog.subscribe((value) => {
+      dog_val = value;
+    });
+
+    const handleSubmit = (e) => {
+      if(e.charCode === 13){
+        console.log(dog);
+        dog.set(new_dog_val);
+        goto("/dog");
+      }
+  };
 </script>
 
 <div class="header">
   <h3>DogQuiry</h3>
-  <input placeholder="Search for a dog breed" />
+  <input  on:keypress={(e) => handleSubmit(e)} bind:value={new_dog_val} placeholder="Search for a dog breed" />
 </div>
 
 <style>

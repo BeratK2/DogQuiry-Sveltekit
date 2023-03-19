@@ -3,24 +3,21 @@
 </script>
 
 <div class="metric-grid">
-  <Metric />
-  <Metric />
-  <Metric />
-  <Metric />
-  <Metric />
-  <Metric />
+  <Metric rating={2} metric="Obedience"/>
+  <Metric rating={10} metric="Size"/>
+  <Metric rating={8} metric="Health"/>
+  <Metric rating={4} metric="Energy"/>
+  <Metric rating={1} metric="Compassion"/>
+  <Metric rating={1} metric="Cleanliness"/>
 </div>
 
 <style>
   .metric-grid {
     display: grid;
-    grid-template-columns: 100% 100%;
-    position: relative;
-    row-gap: 0px;
-    column-gap: 20px;
-    justify-content: space-around;
+    grid-template-columns: 55% 100%;
+    row-gap: 10px;
+    column-gap: 0px;
+    justify-content: space-between;
     float: right;
-    margin-top: 10px;
-    transition: cubic-bezier(0.23, 1, 0.32, 1);
   }
 </style>

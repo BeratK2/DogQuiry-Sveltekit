@@ -1,9 +1,8 @@
 <script>
   import dog from "../lib/dog";
   import { goto } from "$app/navigation";
-  import supabase from "../lib/db/db.js"
-  import { onMount } from "svelte";
-
+  import supabase from "../lib/db.js";
+  
   let dog_val = "";
   let new_dog_val = "";
 
@@ -13,8 +12,6 @@
     dog_val = value;
   });
 
-  console.log(breeds);
-
   const handleSubmit = () => {
     console.log(dog);
     dog.set(new_dog_val);
@@ -22,12 +19,13 @@
   };
 
   const getAllDogs = async () => {
-    try{
+    try {
       let { data, error } = await supabase.from("dogs").select("Breed");
-      console.log(data)
-    }
-    catch(e){
-      console.error(e)
+      breeds = data;
+      console.log(breeds);
+      console.log(error);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -41,14 +39,24 @@
     src="https://www.alltech.com/sites/default/files/2021-08/Pet%20Mobile%20Header_0.png"
   />
   <div class="form-container">
-    <input bind:value={new_dog_val} placeholder="Search for a dog breed" />
+    <input
+      list="breeds"
+      name="breed"
+      bind:value={new_dog_val}
+      placeholder="Search for a dog breed"
+    />
+    <datalist id="breeds">
+      {#each breeds as breed}
+        <option value={breed.Breed} />
+      {/each}
+    </datalist>
     <button on:click={(e) => handleSubmit(e)}>Search This Breed</button>
   </div>
   <p>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta quasi quo
     dolorum aut, laborum eligendi aliquam tempora dicta optio, adipisci maiores
     voluptatibus. Dignissimos animi explicabo culpa, eligendi illo recusandae
-    alias.
+    alias.s
   </p>
 </div>
 
@@ -82,6 +90,7 @@
     width: 650px;
     height: 59px;
     background: rgb(241, 241, 241);
+    color: black;
     border: 1px solid rgba(117, 117, 117, 0.5);
     border-radius: 50px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -97,6 +106,9 @@
   }
   input::target-text {
     margin-left: 10px;
+  }
+  input::-webkit-calendar-picker-indicator {
+    display: none !important;
   }
   button {
     width: 361.65px;

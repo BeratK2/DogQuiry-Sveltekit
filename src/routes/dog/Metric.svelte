@@ -1,17 +1,24 @@
 <script>
-  let rating = 10;
+  export let rating;
+  export let metric;
+
+  let width = rating * 30 + 100;
 </script>
 
 <main>
-  <div class="metric">
-    <p>Obedience: {rating}</p>
+  <div style="width: {width}px" class="metric">
+    <p>{metric}: {rating}</p>
   </div>
 </main>
 
 <style>
   .metric {
+    padding-top: 0px;
     background-color: #e66464;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    min-width: 120px;
+    height: 25px;
+    font-size: 15px;
   }
   p {
     color: white;

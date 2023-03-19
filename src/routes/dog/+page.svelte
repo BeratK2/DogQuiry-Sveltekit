@@ -4,15 +4,34 @@
   import Header from "$lib/Header.svelte";
   import Review from "./Review.svelte";
   import MetricGrid from "./MetricGrid.svelte";
+  import supabase from "../../lib/db.js";
+  import { onMount } from "svelte";
 
   let dog_val = "";
   let new_dog_val = "";
+
+  let metrics = [];
 
   dog.subscribe((value) => {
     dog_val = value;
   });
 
-  console.log(dog_val);
+  const getAllRatings = async () => {
+    try {
+      let { data: dogs, error } = await supabase
+        .from("dogs")
+        .select("avg_size, avg_cleanliness")
+        .eq("Breed", dog_val);
+      metrics = dogs;
+      console.log(metrics);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  onMount(async () => {
+    const res = await getAllRatings();
+  });
 </script>
 
 <main>
@@ -34,27 +53,32 @@
 </main>
 
 <style>
+  main {
+    overflow: hidden;
+  }
   .dog-showcase {
     height: 225px;
     border-bottom: 4px solid rgba(83, 80, 80, 0.2);
-    padding-right: 5%;
-    padding-left: 5%;
-    padding-top: 10px;
-    overflow-y: hidden;
     object-fit: contain;
+    overflow: hidden;
   }
   .metric-grid-container {
-    margin-right: 10%;
+    display: flex;
+    margin-right: 100px;
+    float: right;
+    height: 225px;
+    padding-top: 4px;
   }
   .left-section {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 275px;
+    width: 400px;
     height: 175px;
     padding-bottom: 25px;
     margin-top: 5px;
+    float: left;
   }
   button {
     width: 225px;

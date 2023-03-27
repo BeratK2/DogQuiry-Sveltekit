@@ -8,7 +8,6 @@
   import { onMount } from "svelte";
 
   let dog_val = "";
-  let new_dog_val = "";
 
   let avg_size;
   let avg_energy;
@@ -23,15 +22,15 @@
     dog_val = value;
   });
 
-  const getAllRatings = async () => {
+  const getAllMetrics = async () => {
     try {
-      let { data: dogs, error } = await supabase
+      let { data: metrics, error } = await supabase
         .from("dogs")
         .select(
           "avg_size, avg_obedience, avg_compassion, avg_health, avg_cleanliness, avg_energy"
         )
         .eq("Breed", dog_val);
-      metrics = dogs;
+      metrics = metrics;
       avg_size = metrics[0].avg_size;
       avg_energy = metrics[0].avg_energy;
       avg_cleanliness = metrics[0].avg_cleanliness;
@@ -43,7 +42,7 @@
     }
   };
 
-  getAllRatings();
+  getAllMetrics();
 </script>
 
 <main>

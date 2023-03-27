@@ -10,7 +10,14 @@
   let dog_val = "";
   let new_dog_val = "";
 
-  let metrics = [];
+  let avg_size;
+  let avg_energy;
+  let avg_compassion;
+  let avg_obedience;
+  let avg_health;
+  let avg_cleanliness;
+
+  let metrics = {};
 
   dog.subscribe((value) => {
     dog_val = value;
@@ -20,25 +27,37 @@
     try {
       let { data: dogs, error } = await supabase
         .from("dogs")
-        .select("avg_size, avg_cleanliness")
+        .select(
+          "avg_size, avg_obedience, avg_compassion, avg_health, avg_cleanliness, avg_energy"
+        )
         .eq("Breed", dog_val);
       metrics = dogs;
-      console.log(metrics);
+      avg_size = metrics[0].avg_size;
+      avg_energy = metrics[0].avg_energy;
+      avg_cleanliness = metrics[0].avg_cleanliness;
+      avg_compassion = metrics[0].avg_compassion;
+      avg_health = metrics[0].avg_health;
+      avg_obedience = metrics[0].avg_obedience;
     } catch (e) {
       console.error(e);
     }
   };
 
-  onMount(async () => {
-    const res = await getAllRatings();
-  });
+  getAllRatings();
 </script>
 
 <main>
   <Header />
   <div class="dog-showcase">
     <div class="metric-grid-container">
-      <MetricGrid />
+      <MetricGrid
+        {avg_size}
+        {avg_cleanliness}
+        {avg_energy}
+        {avg_compassion}
+        {avg_obedience}
+        {avg_health}
+      />
     </div>
     <div class="left-section">
       <h1>{dog_val}</h1>

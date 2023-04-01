@@ -7,24 +7,35 @@
   let dog_val = "";
   
   let retrieved_ratings;
-  let combo_ratings;
 
-  let avg_size;
-  let avg_energy;
-  let avg_compassion;
-  let avg_obedience;
-  let avg_health;
-  let avg_cleanliness;
+  let avg_size = 0;
+  let avg_energy = 0;
+  let avg_compassion = 0;
+  let avg_obedience = 0;
+  let avg_health = 0;
+  let avg_cleanliness = 0;
 
+  var obedience_sum = 0;
+  var size_sum = 0;
+  var health_sum = 0;
+  var compassion_sum = 0; 
+  var energy_sum = 0;
+  var cleanliness_sum = 0;
 
-  let rating = {
-    "obedience": 5,
-    "health": 5,
-    "compassion": 5,
-    "size": 5,
-    "cleanliness": 5,
-    "energy": 5,
-    "review": ""
+  var new_size_avg = 0;
+  var new_energy_avg = 0;
+  var new_compassion_avg = 0;
+  var new_obedience_avg = 0;
+  var new_health_avg = 0;
+  var new_cleanliness_avg = 0;
+
+  let my_rating = {
+    "Size": 5,
+    "Energy": 5,
+    "Health": 5,
+    "review": "Helloooooo",
+    "Obedience": 5,
+    "Cleanliness": 5,
   }
 
   dog.subscribe((value) => {
@@ -39,9 +50,30 @@
       .from('dogs')
       .select('rating')
       .eq("Breed", dog_val)
+      
+      //Combine ratings on database to submitted rating
+      retrieved_ratings = ratings[0].rating;
+      retrieved_ratings.push(my_rating)
 
-      retrieved_ratings = ratings;
-      console.log(retrieved_ratings)
+      console.log(retrieved_ratings[0].Obedience)
+      //Get new average ratings 
+      for (var i = 0; i < retrieved_ratings.length; i++) {
+        obedience_sum += Number(retrieved_ratings[i].Obedience);
+        health_sum += Number(retrieved_ratings[i].Health);
+        compassion_sum += Number(retrieved_ratings[i].Compassion);
+        energy_sum += Number(retrieved_ratings[i].Energy);
+        cleanliness_sum += Number(retrieved_ratings[i].Cleanliness);
+        size_sum += Number(retrieved_ratings[i].Size);
+
+        console.log(retrieved_ratings[i].Obedience)
+      }
+      
+      new_obedience_avg = obedience_sum / retrieved_ratings.length
+      new_health_avg = health_sum / retrieved_ratings.length
+      new_compassion_avg = compassion_sum / retrieved_ratings.length
+      new_energy_avg = energy_sum / retrieved_ratings.length
+      new_cleanliness_avg = cleanliness_sum / retrieved_ratings.length
+      new_size_avg = size_sum / retrieved_ratings.length
     }
     catch(e){
       console.error(e)
@@ -49,7 +81,7 @@
   }
 
   //Method to get all average ratings and assign it to corresponding variables
-  const getAllMetrics = async () => {
+  const getAllAverages = async () => {
     try {
       let { data: metrics, error } = await supabase
         .from("dogs")
@@ -57,29 +89,21 @@
           "avg_size, avg_obedience, avg_compassion, avg_health, avg_cleanliness, avg_energy"
         )
         .eq("Breed", dog_val);
-      metrics = metrics;
-      avg_size = metrics[0].avg_size;
-      avg_energy = metrics[0].avg_energy;
-      avg_cleanliness = metrics[0].avg_cleanliness;
-      avg_compassion = metrics[0].avg_compassion;
-      avg_health = metrics[0].avg_health;
-      avg_obedience = metrics[0].avg_obedience;
+
+        avg_size = metrics[0].avg_size;
+        avg_obedience = metrics[0].avg_obedience;
+        avg_compassion = metrics[0].avg_compassion;
+        avg_cleanliness = metrics[0].avg_cleanliness;
+        avg_health = metrics[0].avg_health;
+        avg_energy = metrics[0].avg_energy;
+
     } catch (e) {
       console.error(e);
     }
   }
 
-
-  //Method to combine new JSON object(rating) to JSON array(retrieved_ratings)
-  const combineRatings = () => {
-    combo_ratings = retrieved_ratings[0].rating
-    combo_ratings.push(rating)
-    console.log(combo_ratings)
-  }  
-
+  getAllAverages();
   getAllUserRatings();
-  getAllMetrics();
-  //combineRatings();
 
 </script>
 
@@ -87,31 +111,31 @@
   <Header />
   <section>
     <h2>Rate this breed's OBEDIENCE from 1-10</h2>
-    <input bind:value={rating.obedience} type="range" min="1" max="10" class="slider" id="myRange" />
+    <input bind:value={my_rating.Obedience} type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
     <h2>Rate this breed's HEALTH from 1-10</h2>
-    <input bind:value={rating.health} type="range" min="1" max="10" class="slider" id="myRange" />
+    <input bind:value={my_rating.Health} type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this breed's COMPASSION from 1-10</h2>
-    <input bind:value={rating.compassion} type="range" min="1" max="10" class="slider" id="myRange" />
+    <h2>Rate how FRIENDLY this breed is from 1-10</h2>
+    <input bind:value={my_rating.Compassion} type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
     <h2>Rate this breed's SIZE from 1-10</h2>
-    <input bind:value={rating.size} type="range" min="1" max="10" class="slider" id="myRange" />
+    <input bind:value={my_rating.Size} type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
-    <h2>Rate this breed's CLEANLINESS from 1-10</h2>
-    <input bind:value={rating.cleanliness} type="range" min="1" max="10" class="slider" id="myRange" />
+    <h2>Rate how CLEAN this dog is from 1-10</h2>
+    <input bind:value={my_rating.Cleanliness} type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
     <h2>Rate how ENERGETIC this breed is from 1-10</h2>
-    <input bind:value={rating.energy} type="range" min="1" max="10" class="slider" id="myRange" />
+    <input bind:value={my_rating.Energy} type="range" min="1" max="10" class="slider" id="myRange" />
   </section>
   <section>
     <h2>Share your experience owning this breed</h2>
-    <textarea bind:value={rating.review} id="" cols="30" rows="10" />
+    <textarea bind:value={my_rating.review} id="" cols="30" rows="10" />
   </section>
   <section>
     <button on:click={() => goto("/dog")}>Submit Review</button>

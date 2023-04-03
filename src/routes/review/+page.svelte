@@ -36,11 +36,21 @@
     review: "",
     Obedience: 5,
     Cleanliness: 5,
+    Compassion: 5
   };
 
   dog.subscribe((value) => {
     dog_val = value;
   });
+
+  //Method to add JSON body to database
+  const addJSON = async () => {
+    
+  }
+
+
+  //Method to get averages of all JSON body data and add it to average columns
+
 
   //Method to get all user ratings and assign it to retrieved_ratings
   const handleSumbit = async () => {
@@ -55,7 +65,12 @@
       retrieved_ratings = ratings[0].rating;
       
       if(!retrieved_ratings){
-        retrieved_ratings = my_rating;
+        console.log(my_rating)
+        retrieved_ratings = [my_rating];
+        console.log(retrieved_ratings)
+      }
+      else{
+        retrieved_ratings = retrieved_ratings.push(my_rating)
       }
 
       //Get new average ratings
@@ -65,7 +80,7 @@
         compassion_sum += Number(retrieved_ratings[i].Compassion);
         energy_sum += Number(retrieved_ratings[i].Energy);
         cleanliness_sum += Number(retrieved_ratings[i].Cleanliness);
-        size_sum += Number(retrieved_ratings[i].Size);
+        size_sum += Number(retrieved_ratings[i].Size); 
       }
 
       new_obedience_avg = obedience_sum / retrieved_ratings.length;
@@ -75,6 +90,7 @@
       new_cleanliness_avg = cleanliness_sum / retrieved_ratings.length;
       new_size_avg = size_sum / retrieved_ratings.length;
 
+      console.log(retrieved_ratings)
       updateAverages(new_cleanliness_avg, new_obedience_avg, new_compassion_avg, new_size_avg, new_energy_avg, new_health_avg);
     } catch (e) {
       console.error(e);

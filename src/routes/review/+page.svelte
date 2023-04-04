@@ -8,27 +8,6 @@
 
   let retrieved_ratings;
 
-  let avg_size = 0;
-  let avg_energy = 0;
-  let avg_compassion = 0;
-  let avg_obedience = 0;
-  let avg_health = 0;
-  let avg_cleanliness = 0;
-
-  var obedience_sum = 0;
-  var size_sum = 0;
-  var health_sum = 0;
-  var compassion_sum = 0;
-  var energy_sum = 0;
-  var cleanliness_sum = 0;
-
-  var new_size_avg = 0;
-  var new_energy_avg = 0;
-  var new_compassion_avg = 0;
-  var new_obedience_avg = 0;
-  var new_health_avg = 0;
-  var new_cleanliness_avg = 0;
-
   let my_rating = {
     Size: 5,
     Energy: 5,
@@ -36,7 +15,7 @@
     review: "",
     Obedience: 5,
     Cleanliness: 5,
-    Compassion: 5
+    Compassion: 5,
   };
 
   dog.subscribe((value) => {
@@ -45,12 +24,62 @@
 
   //Method to add JSON body to database
   const addJSON = async () => {
-    
-  }
+    //Get JSON body for corresponding breed
+    const { data, error } = await supabase
+      .from("dogs")
+      .select("rating")
+      .eq("Breed", dog_val);
+    if (error) {
+      console.error(error);
+      return;
+    }
 
+    let json_array;
+
+    //Check whether or not there is existing JSON data and append all data
+    if (data[0]["rating"] === null) {
+      json_array = my_rating;
+    } else {
+      json_array = data[0]["rating"];
+      json_array.push(my_rating);
+    }
+
+    // Calculate the averages of value1, value2, and value3
+    const avg_size =
+      json_array.reduce((sum, obj) => sum + obj.Size, 0) / json_array.length;
+    const avg_energy =
+      json_array.reduce((sum, obj) => sum + obj.Energy, 0) / json_array.length;
+    const avg_health =
+      json_array.reduce((sum, obj) => sum + obj.Health, 0) / json_array.length;
+    const avg_obedience =
+      json_array.reduce((sum, obj) => sum + obj.Obedience, 0) /
+      json_array.length;
+    const avg_cleanliness =
+      json_array.reduce((sum, obj) => sum + obj.Cleanliness, 0) /
+      json_array.length;
+    const avg_compassion =
+      json_array.reduce((sum, obj) => sum + obj.Compassion, 0) /
+      json_array.length;
+
+    console.log(avg_energy);
+
+    //Update row with new array
+    const { error: update_error } = await supabase
+      .from("dogs")
+      .update({"rating": json_array})
+      .eq("Breed", dog_val);
+
+    if (update_error) {
+      console.error(update_error);
+      return;
+    }
+
+    console.log("Row updated successfully");
+    goto("/dog");
+  };
 
   //Method to get averages of all JSON body data and add it to average columns
-
+  const addAverages = async () => {};
 
   //Method to get all user ratings and assign it to retrieved_ratings
   const handleSumbit = async () => {
@@ -59,18 +88,17 @@
         .from("dogs")
         .select("rating")
         .eq("Breed", dog_val)
-        .then()
+        .then();
 
       //Combine ratings on database to submitted rating
       retrieved_ratings = ratings[0].rating;
-      
-      if(!retrieved_ratings){
-        console.log(my_rating)
+
+      if (!retrieved_ratings) {
+        console.log(my_rating);
         retrieved_ratings = [my_rating];
-        console.log(retrieved_ratings)
-      }
-      else{
-        retrieved_ratings = retrieved_ratings.push(my_rating)
+        console.log(retrieved_ratings);
+      } else {
+        retrieved_ratings = retrieved_ratings.push(my_rating);
       }
 
       //Get new average ratings
@@ -80,7 +108,7 @@
         compassion_sum += Number(retrieved_ratings[i].Compassion);
         energy_sum += Number(retrieved_ratings[i].Energy);
         cleanliness_sum += Number(retrieved_ratings[i].Cleanliness);
-        size_sum += Number(retrieved_ratings[i].Size); 
+        size_sum += Number(retrieved_ratings[i].Size);
       }
 
       new_obedience_avg = obedience_sum / retrieved_ratings.length;
@@ -90,40 +118,53 @@
       new_cleanliness_avg = cleanliness_sum / retrieved_ratings.length;
       new_size_avg = size_sum / retrieved_ratings.length;
 
-      console.log(retrieved_ratings)
-      updateAverages(new_cleanliness_avg, new_obedience_avg, new_compassion_avg, new_size_avg, new_energy_avg, new_health_avg);
+      console.log(retrieved_ratings);
+      updateAverages(
+        new_cleanliness_avg,
+        new_obedience_avg,
+        new_compassion_avg,
+        new_size_avg,
+        new_energy_avg,
+        new_health_avg
+      );
     } catch (e) {
       console.error(e);
     }
   };
 
-  const updateAverages = async (cleanliness, obedience, compassion, size, energy, health) => {
-    cleanliness = Math.round(cleanliness)
-    obedience = Math.round(obedience)
-    compassion = Math.round(compassion)
-    size = Math.round(size)
-    energy = Math.round(energy)
-    health = Math.round(health)
+  const updateAverages = async (
+    cleanliness,
+    obedience,
+    compassion,
+    size,
+    energy,
+    health
+  ) => {
+    cleanliness = Math.round(cleanliness);
+    obedience = Math.round(obedience);
+    compassion = Math.round(compassion);
+    size = Math.round(size);
+    energy = Math.round(energy);
+    health = Math.round(health);
 
-    console.log(obedience)
-    const {error } = await supabase
-        .from("dogs")
-        .update({
-          avg_cleanliness: cleanliness,
-          avg_obedience: obedience,
-          avg_compassion: compassion,
-          avg_size: size,
-          avg_energy: energy,
-          avg_health: health
-        })
-        .eq("Breed", dog_val)
-        if(error){
-          console.error(error)
-        }
-        else{
-          console.log(dog_val)
-        }
-  }
+    console.log(obedience);
+    const { error } = await supabase
+      .from("dogs")
+      .update({
+        avg_cleanliness: cleanliness,
+        avg_obedience: obedience,
+        avg_compassion: compassion,
+        avg_size: size,
+        avg_energy: energy,
+        avg_health: health,
+      })
+      .eq("Breed", dog_val);
+    if (error) {
+      console.error(error);
+    } else {
+      console.log(dog_val);
+    }
+  };
 
   //Method to get all average ratings and assign it to corresponding variables
   const getAllAverages = async () => {
@@ -146,7 +187,6 @@
     }
   };
 
-  getAllAverages();
 </script>
 
 <main>
@@ -222,7 +262,7 @@
     <textarea bind:value={my_rating.review} id="" cols="30" rows="10" />
   </section>
   <section>
-    <button on:click={(e) => handleSumbit(e)}>Submit Review</button>
+    <button on:click={(e) => addJSON(e)}>Submit Review</button>
   </section>
 </main>
 

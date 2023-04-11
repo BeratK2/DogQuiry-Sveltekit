@@ -1,62 +1,28 @@
 <script>
   import dog from "../../lib/dog.js";
   import { goto } from "$app/navigation";
-  import Header from "$lib/Header.svelte";
   import Review from "./Review.svelte";
   import MetricGrid from "./MetricGrid.svelte";
-  import supabase from "../../lib/db.js";
   import { onMount } from "svelte";
+  import Metric from "./Metric.svelte";
+  import { get } from "svelte/store";
 
-  let dog_val = "";
-
-  let avg_size;
-  let avg_energy;
-  let avg_compassion;
-  let avg_obedience;
-  let avg_health;
-  let avg_cleanliness;
-
-  let metrics = {};
-
+  export let dog_val = "";
+  
   dog.subscribe((value) => {
     dog_val = value;
   });
+  
+  onMount(async () => {
+    const response = await fetch(`http://localhost:5173/api/dog.js/${dog_val}`)
+    data = await response.json();
+    console.log(data);
+  }) 
 
-  const getAllMetrics = async () => {
-    try {
-      let { data: metrics, error } = await supabase
-        .from("dogs")
-        .select(
-          "avg_size, avg_obedience, avg_compassion, avg_health, avg_cleanliness, avg_energy"
-        )
-        .eq("Breed", dog_val);
-      metrics = metrics;
-      avg_size = metrics[0].avg_size;
-      avg_energy = metrics[0].avg_energy;
-      avg_cleanliness = metrics[0].avg_cleanliness;
-      avg_compassion = metrics[0].avg_compassion;
-      avg_health = metrics[0].avg_health;
-      avg_obedience = metrics[0].avg_obedience;
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  getAllMetrics();
-</script>
-
+  </script>
 <main>
-  <Header />
   <div class="dog-showcase">
     <div class="metric-grid-container">
-      <MetricGrid
-        {avg_size}
-        {avg_cleanliness}
-        {avg_energy}
-        {avg_compassion}
-        {avg_obedience}
-        {avg_health}
-      />
     </div>
     <div class="left-section">
       <h1>{dog_val}</h1>

@@ -8,21 +8,76 @@
   import { get } from "svelte/store";
 
   export let dog_val = "";
-  
+
+  let average_cleanliness;
+  let average_compassion;
+  let average_size;
+  let average_health;
+  let average_obedience;
+  let average_energy;
+
   dog.subscribe((value) => {
     dog_val = value;
   });
-  
-  onMount(async () => {
-    const response = await fetch(`http://localhost:5173/api/dog.js/${dog_val}`)
-    data = await response.json();
-    console.log(data);
-  }) 
 
-  </script>
+  let averages;
+  let ratings;
+
+  onMount(async () => {
+
+    //Get overall averages
+    const avg_req = await fetch(
+      `http://localhost:5173/api/averages.js?dog=${dog_val}`
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        averages = data;
+      });
+
+      average_energy = averages[0].avg_energy;
+      average_obedience = averages[0].avg_obedience;
+      average_size = averages[0].avg_size;
+      average_compassion = averages[0].avg_compassion;
+      average_cleanliness = averages[0].avg_cleanliness;
+      average_health = averages[0].avg_health;
+
+
+    //Get individual ratings
+    const rating_req = await fetch(
+      `http://localhost:5173/api/ratings.js?dog=${dog_val}`
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        averages = data;
+      });
+
+      average_energy = averages[0].avg_energy;
+      average_obedience = averages[0].avg_obedience;
+      average_size = averages[0].avg_size;
+      average_compassion = averages[0].avg_compassion;
+      average_cleanliness = averages[0].avg_cleanliness;
+      average_health = averages[0].avg_health;
+
+
+      console.log(average_cleanliness);
+  });
+</script>
+
 <main>
   <div class="dog-showcase">
     <div class="metric-grid-container">
+      <MetricGrid
+        {average_size}
+        {average_cleanliness}
+        {average_compassion}
+        {average_energy}
+        {average_health}
+        {average_obedience}
+      />
     </div>
     <div class="left-section">
       <h1>{dog_val}</h1>

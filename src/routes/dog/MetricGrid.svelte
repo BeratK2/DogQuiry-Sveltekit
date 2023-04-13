@@ -1,20 +1,20 @@
 <script>
   import Metric from "./Metric.svelte";
-  export let avg_size;
-  export let avg_cleanliness;
-  export let avg_health;
-  export let avg_compassion;
-  export let avg_energy;
-  export let avg_obedience;
+  export let average_size;
+  export let average_cleanliness;
+  export let average_health;
+  export let average_compassion;
+  export let average_energy;
+  export let average_obedience;
 </script>
 
 <div class="metric-grid">
-  <Metric rating={avg_obedience} metric="Obedience"/>
-  <Metric rating={avg_size} metric="Size"/>
-  <Metric rating={avg_health} metric="Health"/>
-  <Metric rating={avg_energy} metric="Energy"/>
-  <Metric rating={avg_compassion} metric="Compassion"/>
-  <Metric rating={avg_cleanliness} metric="Cleanliness"/>
+  <Metric rating={average_obedience} metric="Obedience"/>
+  <Metric rating={average_size} metric="Size"/>
+  <Metric rating={average_health} metric="Health"/>
+  <Metric rating={average_energy} metric="Energy"/>
+  <Metric rating={average_compassion} metric="Compassion"/>
+  <Metric rating={average_cleanliness} metric="Cleanliness"/>
 </div>
 
 <style>

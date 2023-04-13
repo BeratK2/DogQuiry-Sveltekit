@@ -1,14 +1,16 @@
 import { json } from "@sveltejs/kit";
 import supabase from "../../../lib/db";
 
-export const GET = async ({input}) => {
-  const getBreed = async () => {
+export const GET = async ({url}) => {
+  const dog = url.searchParams.get('dog')
+
+  const getRatings = async () => {
     let breeds;
     try {
       let { data, error } = await supabase
         .from("dogs")
-        .select("avg_energy")
-        .eq("Breed", input);
+        .select("rating")
+        .eq("Breed", dog);
       breeds = data;
       console.log(breeds)
       return breeds;
@@ -16,5 +18,8 @@ export const GET = async ({input}) => {
       console.error(e);
     }    
   };
-  return json(getBreed())
+
+  const averages = await getRatings();
+
+  return json(averages);
 };

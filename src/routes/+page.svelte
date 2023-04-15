@@ -1,12 +1,12 @@
 <script>
   import dog from "../lib/dog";
   import { goto } from "$app/navigation";
-  import supabase from "../lib/db.js";
   
+  export let data;
+  const { breeds } = data;
+
   let dog_val = "";
   let new_dog_val = "";
-
-  let breeds = [];
 
   dog.subscribe((value) => {
     dog_val = value;
@@ -18,18 +18,6 @@
     goto("/dog");
   };
 
-  const getAllDogs = async () => {
-    try {
-      let { data, error } = await supabase.from("dogs").select("Breed");
-      breeds = data;
-      console.log(breeds);
-      console.log(error);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  getAllDogs();
 </script>
 
 <div class="index">
@@ -53,10 +41,7 @@
     <button on:click={(e) => handleSubmit(e)}>Search This Breed</button>
   </div>
   <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta quasi quo
-    dolorum aut, laborum eligendi aliquam tempora dicta optio, adipisci maiores
-    voluptatibus. Dignissimos animi explicabo culpa, eligendi illo recusandae
-    alias.s
+    Find the perfect breed! 🐶🐕
   </p>
 </div>
 

@@ -5,15 +5,15 @@ export const GET = async ({url}) => {
   const dog = url.searchParams.get('dog')
 
   const getRatings = async () => {
-    let breeds;
+    let ratings;
     try {
       let { data, error } = await supabase
         .from("dogs")
         .select("rating")
         .eq("Breed", dog);
-      breeds = data;
-      console.log(breeds)
-      return breeds;
+      ratings = data;
+      console.log(ratings)
+      return ratings;
     } catch (e) {
       console.error(e);
     }    

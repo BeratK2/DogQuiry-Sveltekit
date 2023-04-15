@@ -41,7 +41,7 @@
     <button on:click={(e) => handleSubmit(e)}>Search This Breed</button>
   </div>
   <p>
-    Find the perfect breed! 🐶🐱
+    Find the perfect breed! 🐶🐕
   </p>
 </div>
 

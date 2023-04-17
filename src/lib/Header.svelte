@@ -16,7 +16,7 @@
   onMount(async () => {
     //Get overall averages
     const dog_req = await fetch(
-      `http://dogquiry.vercel.app/api/dogs.js?dog=${dog_val}`
+      `https://dogquiry.vercel.app/api/dogs.js?dog=${dog_val}`
     )
       .then(function (response) {
         return response.json();

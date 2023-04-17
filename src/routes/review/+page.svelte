@@ -22,7 +22,7 @@
 
   const handleSubmit = async () => {
     const rating = await fetch(
-      `http://dogquiry.vercel.app/api/review.js?dog=${dog_val}&rating=${JSON.stringify(my_rating)}`
+      `https://dogquiry.vercel.app/api/review.js?dog=${dog_val}&rating=${JSON.stringify(my_rating)}`
     )
       .then(function (response) {
         return response.json();

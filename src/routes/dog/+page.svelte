@@ -30,7 +30,7 @@
 
     //Get overall averages
     const avg_req = await fetch(
-      `http://localhost:5173/api/averages.js?dog=${dog_val}`
+      `http://dogquiry.vercel.app/api/averages.js?dog=${dog_val}`
     )
       .then(function (response) {
         return response.json();
@@ -48,7 +48,7 @@
 
     //Get individual ratings
     const rating_req = await fetch(
-      `http://localhost:5173/api/ratings.js?dog=${dog_val}`
+      `http://dogquiry.vercel.app/api/ratings.js?dog=${dog_val}`
     )
       .then(function (response) {
         return response.json();

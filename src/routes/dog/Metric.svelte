@@ -1,8 +1,13 @@
 <script>
+  import { onMount } from "svelte";
+
   export let rating;
   export let metric;
 
-  let width = rating * 30 + 100;
+  let width;
+  onMount(() => {
+    width = (rating * 10) + 125;
+  })
 </script>
 
 <main>
@@ -16,9 +21,9 @@
     padding-top: 0px;
     background-color: #e66464;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    min-width: 120px;
     height: 25px;
     font-size: 15px;
+    position: relative;
   }
   p {
     color: white;

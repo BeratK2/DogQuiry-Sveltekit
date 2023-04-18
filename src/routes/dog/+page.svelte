@@ -1,61 +1,77 @@
 <script>
   import dog from "../../lib/dog.js";
   import { goto } from "$app/navigation";
-  import Header from "$lib/Header.svelte";
   import Review from "./Review.svelte";
   import MetricGrid from "./MetricGrid.svelte";
-  import supabase from "../../lib/db.js";
   import { onMount } from "svelte";
+  import Metric from "./Metric.svelte";
+  import { get } from "svelte/store";
+  import { each } from "svelte/internal";
+  import Header from "../../lib/Header.svelte";
 
-  let dog_val = "";
+  export let dog_val = "";
 
-  let avg_size;
-  let avg_energy;
-  let avg_compassion;
-  let avg_obedience;
-  let avg_health;
-  let avg_cleanliness;
-
-  let metrics = {};
+  let average_cleanliness = 10;
+  let average_compassion = 10;
+  let average_size;
+  let average_health;
+  let average_obedience;
+  let average_energy;
 
   dog.subscribe((value) => {
     dog_val = value;
   });
 
-  const getAllMetrics = async () => {
-    try {
-      let { data: metrics, error } = await supabase
-        .from("dogs")
-        .select(
-          "avg_size, avg_obedience, avg_compassion, avg_health, avg_cleanliness, avg_energy"
-        )
-        .eq("Breed", dog_val);
-      metrics = metrics;
-      avg_size = metrics[0].avg_size;
-      avg_energy = metrics[0].avg_energy;
-      avg_cleanliness = metrics[0].avg_cleanliness;
-      avg_compassion = metrics[0].avg_compassion;
-      avg_health = metrics[0].avg_health;
-      avg_obedience = metrics[0].avg_obedience;
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  let averages;
+  let ratings = [];
 
-  getAllMetrics();
+  //Method to get overall averages and each rating
+  onMount(async () => {
+
+    //Get overall averages
+    const avg_req = await fetch(
+      `https://dogquiry.vercel.app/api/averages.js?dog=${dog_val}`
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        averages = data;
+      });
+
+      average_energy = averages[0].avg_energy;
+      average_obedience = averages[0].avg_obedience;
+      average_size = averages[0].avg_size;
+      average_compassion = averages[0].avg_compassion;
+      average_cleanliness = averages[0].avg_cleanliness;
+      average_health = averages[0].avg_health;
+
+    //Get individual ratings
+    const rating_req = await fetch(
+      `https://dogquiry.vercel.app/api/ratings.js?dog=${dog_val}`
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        ratings = data;
+      });
+
+      ratings = ratings[0].rating;
+});
 </script>
 
 <main>
-  <Header />
   <div class="dog-showcase">
+    <Header/>
     <div class="metric-grid-container">
       <MetricGrid
-        {avg_size}
-        {avg_cleanliness}
-        {avg_energy}
-        {avg_compassion}
-        {avg_obedience}
-        {avg_health}
+        size={average_size}
+        cleanliness={average_cleanliness}
+        compassion={average_compassion}
+        energy={average_energy}
+        health={average_health}
+        obedience={average_obedience}
       />
     </div>
     <div class="left-section">
@@ -63,11 +79,17 @@
       <button on:click={() => goto("/review")}>Review This Breed</button>
     </div>
   </div>
-  <Review />
-  <Review />
-  <Review />
-  <Review />
-  <Review />
+  {#each ratings as rating}
+    <Review
+      review={rating.review}
+      size={rating.Size}
+      compassion={rating.Compassion}
+      health={rating.Health}
+      obedience={rating.Obedience}
+      cleanliness={rating.Cleanliness}
+      energy={rating.Energy}
+    />
+  {/each}
 </main>
 
 <style>
@@ -75,7 +97,7 @@
     overflow: hidden;
   }
   .dog-showcase {
-    height: 225px;
+    height: 300px;
     border-bottom: 4px solid rgba(83, 80, 80, 0.2);
     object-fit: contain;
     overflow: hidden;

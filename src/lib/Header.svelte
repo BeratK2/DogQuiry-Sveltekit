@@ -1,7 +1,7 @@
 <script>
   import dog from "../lib/dog";
   import { goto } from "$app/navigation";
-  import supabase from "./db";
+  import { onMount } from "svelte";
 
   let dog_val = "";
   let new_dog_val = "";
@@ -12,16 +12,19 @@
     dog_val = value;
   });
 
-  const getAllDogs = async () => {
-    try {
-      let { data, error } = await supabase.from("dogs").select("Breed");
-      breeds = data;
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  getAllDogs();
+  //Method to get overall averages and each rating
+  onMount(async () => {
+    //Get overall averages
+    const dog_req = await fetch(
+      `https://dogquiry.vercel.app/api/dogs.js?dog=${dog_val}`
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        breeds = data;
+      });
+  });
 
   const handleSubmit = (e) => {
     if (e.charCode === 13) {

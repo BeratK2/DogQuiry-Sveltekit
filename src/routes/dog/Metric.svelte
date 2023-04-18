@@ -6,7 +6,7 @@
 
   let width;
   onMount(() => {
-    width = (rating * 30) + 200;
+    width = (rating * 10) + 125;
   })
 </script>
 

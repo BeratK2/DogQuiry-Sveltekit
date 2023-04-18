@@ -22,7 +22,7 @@
     display: grid;
     grid-template-columns: 55% 100%;
     row-gap: 10px;
-    column-gap: 0px;
+    column-gap: 40px;
     justify-content: space-between;
     float: right;
   }

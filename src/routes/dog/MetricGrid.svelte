@@ -20,7 +20,7 @@
 <style>
   .metric-grid {
     display: grid;
-    grid-template-columns: 55% 100%;
+    grid-template-columns: 55% 55%;
     row-gap: 10px;
     column-gap: 0px;
     justify-content: space-between;
